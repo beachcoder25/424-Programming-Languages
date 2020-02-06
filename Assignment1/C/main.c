@@ -1,37 +1,32 @@
 #include<stdio.h>
+void swap(int * i, int* j);
+void qsort(int *a, int i, int j);
+int place_pivot(int *a, int left, int right);
+
+
+
 
 void qsort2(int *a, int n){
 
+  qsort(a, 0, n-1);
 
 }
 
-void place_pivot(int *a, int n){
+void qsort(int *a, int start, int end){
 
-  int i=0;
-  int j=0; 
-  int pivot = *(a+(n-1)); 
-  //printf("%d",pivot); // Works
+  
+    // Get pivot
 
-  for(int j=0; j < n ; j++){
+  if(start<end){
+    int sub_n_val = end - start;
+    int pivot = place_pivot(a,start,end);
     
-    if(a[j] < pivot){
-      i++;
-      
-      // Swap
-      int temp = *(a+i);
-      a[i] = *(a+j);
-      a[j] = temp;
-      
-    }
+
+    qsort(a, 0, pivot -1);
+    qsort(a, pivot+1, end);
   }
-}
 
-// Works
-void swap(int *a, int i, int j){
-
-  int temp = a[i];
-  a[i] = a[j];
-  a[j] = temp;
+  
 
 }
 
@@ -41,9 +36,48 @@ void print(int *a, int n){
   for(int i=0; i < n ; i++){
     printf("%d,", a[i]);
   }
+}
+
+
+
+int place_pivot(int *a, int left, int right){
+
+  int i=left-1;
+
+  int pivot = a[right];
+  
+
+  for(int j=left; j < right; j++){
+
+    if(a[j] <= pivot){
+      
+      i++;
+      swap(&a[i], &a[j]);
+    }
+  }
+
+  swap(&a[right],&a[i+1]);
+
+  
+  //print(a,right);
+
+  return i + 1; // return pivot position
+}
+
+// Works
+//void swap(int *a, int i, int j){
+void swap(int * i, int* j){
+
+  int temp = *i;
+  *i = *j;
+  *j = temp;
+
+}
+
+
 
   //printf();
-}
+
 
 
 int main() {
@@ -51,7 +85,9 @@ int main() {
   int array[] = {3,4,5,8,9,7};
   size_t n = sizeof(array) / sizeof(array[0]);
   //swap(array, 0, 1);
-  place_pivot(array, n);
+  print(array, n);
+  printf("\n");
+  qsort2(array, n);
   print(array, n);
 
   return 0;
